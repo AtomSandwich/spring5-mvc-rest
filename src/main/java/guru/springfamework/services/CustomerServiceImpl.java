@@ -14,14 +14,11 @@ import guru.springfamework.repositories.CustomerRepository;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 	
-	private CustomerMapper customerMapper;
-    private CustomerRepository customerRepository;
-    @Autowired
-    public void setCustomerMapper(CustomerMapper customerMapper) {
+    private final CustomerMapper customerMapper;
+    private final CustomerRepository customerRepository;
+
+    public CustomerServiceImpl(CustomerMapper customerMapper, CustomerRepository customerRepository) {
         this.customerMapper = customerMapper;
-    }
-    @Autowired
-    public void setCustomerRepository(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 
@@ -50,7 +47,20 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
 		
+		return saveAndReturnDTO(customerMapper.customerDtoToCustomer(customerDTO));
+		
+	}
+	@Override
+	public CustomerDTO saveCustomerByDTO(Long id, CustomerDTO customerDTO) {
+		
 		Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
+		
+		customer.setId(id);
+		
+		return saveAndReturnDTO(customer);
+	}
+	
+	private CustomerDTO saveAndReturnDTO(Customer customer) {
 		
 		Customer savedCustomer = customerRepository.save(customer);
 		
@@ -59,6 +69,7 @@ public class CustomerServiceImpl implements CustomerService {
 		returnDto.setCustomerUrl("/api/v1/customer/" + savedCustomer.getId());
 		
 		return returnDto;
+		
 	}
 
 }
