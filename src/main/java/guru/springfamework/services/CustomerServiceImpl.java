@@ -3,7 +3,6 @@ package guru.springfamework.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import guru.springfamework.api.v1.mapper.CustomerMapper;
@@ -71,5 +70,40 @@ public class CustomerServiceImpl implements CustomerService {
 		return returnDto;
 		
 	}
+	
+	@Override
+	public CustomerDTO patchCustomer(Long id, CustomerDTO customerDTO) {
+		return customerRepository.findById(id).map(customer -> {
+			
+			if(customerDTO.getFirstname() != null) {
+				customer.setFirstname(customerDTO.getFirstname());
+			}
+			
+			if(customerDTO.getLastname() != null) {
+				customer.setLastname(customerDTO.getLastname());
+			}
+			
+			return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+		}).orElseThrow(RuntimeException::new);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
