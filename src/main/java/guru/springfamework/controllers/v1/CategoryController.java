@@ -12,8 +12,10 @@ import guru.springfamework.api.v1.model.CategoryListDTO;
 import guru.springfamework.services.CategoryService;
 
 @Controller
-@RequestMapping("/api/v1/categories/")
+@RequestMapping(CategoryController.BASE_URL)
 public class CategoryController {
+	
+	public static final String BASE_URL = "/api/v1/categories";
 	
 	private final CategoryService categoryService;
 
